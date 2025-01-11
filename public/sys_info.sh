@@ -33,24 +33,29 @@ if [ -f /etc/os-release ]; then
   . /etc/os-release
   OS_NAME=$NAME
   OS_VERSION=$VERSION
+  OS_PRETTY=$PRETTY_NAME
 else
   OS_NAME="未知发行版"
   OS_VERSION="未知版本"
+  OS_PRETTY="$OS_NAME $OS_VERSION"
 fi
 
 # 输出检测结果
 echo "============================="
 echo "      系统信息检测结果       "
 echo "============================="
-echo "操作系统: $OS ($OS_NAME $OS_VERSION)"
+echo "操作系统: $OS ($OS_PRETTY)"
 echo "内核版本: $KERNEL_VERSION"
 echo "平台信息: $platform"
 echo "系统架构: $ARCH"
 echo "============================="
 
 # 提示最终结果
-if [[ $ARCH == *"不支持"* ]]; then
-  echo "警告：您的系统架构不被支持，一些工具可能无法正常运行。"
-else
-  echo "检测完成：您的系统是 $OS_NAME $OS_VERSION，架构为 $ARCH。"
-fi
+case "$ARCH" in
+  *"不支持"*)
+    echo "警告：您的系统架构不被支持，一些工具可能无法正常运行。"
+    ;;
+  *)
+    echo "检测完成：您的系统是 $OS_PRETTY，架构为 $ARCH。"
+    ;;
+esac
